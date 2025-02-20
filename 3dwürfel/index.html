@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Cube</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    <div class="scene">
+        <div class="cube">
+            <div class="face front"><div class="grid"></div></div>
+            <div class="face back"><div class="grid"></div></div>
+            <div class="face left"><div class="grid"></div></div>
+            <div class="face right"><div class="grid"></div></div>
+            <div class="face top"><div class="grid"></div></div>
+            <div class="face bottom"><div class="grid"></div></div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <!-- Button zum Starten/Stoppen der Rotation -->
+        <button id="toggle_rotation">Rotation Starten</button>
+        <!-- Geschwindigkeitsregler -->
+        <label for="speed">Geschwindigkeit:</label>
+        <input type="range" id="speed" min="1" max="10" value="5">
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function(){
+            let cube = document.querySelector('.cube');
+            let grids = document.querySelectorAll('.grid');
+            let isRotating = false;
+            let rotationX = 0;
+            let rotationY = 0;
+            let rotationSpeed = 1; // Anfangsgeschwindigkeit
+
+            const toggleButton = document.getElementById('toggle_rotation');
+            const speedControl = document.getElementById('speed');
+
+            // Funktion für die Rotation
+            function rotateCube() {
+                if (isRotating) {
+                    rotationX += rotationSpeed;
+                    rotationY += rotationSpeed;
+                    cube.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
+                    requestAnimationFrame(rotateCube);
+                }
+            }
+
+            // Button-Event: Start/Stop Rotation
+            toggleButton.addEventListener('click', () => {
+                isRotating = !isRotating;
+                toggleButton.textContent = isRotating ? 'Rotation Stoppen' : 'Rotation Starten';
+                if (isRotating) rotateCube();
+            });
+
+            // Geschwindigkeitseinstellung
+            speedControl.addEventListener('input', (e) => {
+                rotationSpeed = parseFloat(e.target.value) * 0.5; // passt die Geschwindigkeit an
+            });
+
+            // Funktion, die eine zufällige Farbe aus einer vordefinierten Palette generiert
+            function getRandomColor() {
+                const colors = ['#FF5733', '#33FF57', '#3357FF', '#FF33A8', '#33FFF5', '#F5FF33']; // verschiedene Farben
+                return colors[Math.floor(Math.random() * colors.length)];
+            }
+
+            // Interaktiver Effekt für die Raster-Elemente
+            grids.forEach(grid => {
+                for (let i = 0; i < 100; i++) {
+                    let span = document.createElement('span');
+                    grid.appendChild(span);
+                    span.addEventListener('click', () => {
+                        span.style.backgroundColor = getRandomColor();
+                    });
+                    span.addEventListener('mouseenter', () => {
+                        span.style.transform = 'scale(1.2)';
+                    });
+                    span.addEventListener('mouseleave', () => {
+                        span.style.transform = 'scale(1)';
+                    });
+                }
+            });
+
+            // Funktion für zufälligen Leuchteffekt für mehrere span-Elemente
+            function addRandomActiveClasses() {
+                grids.forEach(grid => {
+                    let spans = grid.querySelectorAll('span');
+
+                    // Zufällig 5-10 span-Elemente auswählen, die leuchten sollen
+                    let numberOfActiveSpans = Math.floor(Math.random() * 6) + 5;
+
+                    for (let i = 0; i < numberOfActiveSpans; i++) {
+                        let randomIndex = Math.floor(Math.random() * spans.length);
+                        let selectedSpan = spans[randomIndex];
+                        selectedSpan.classList.add('active');
+                        selectedSpan.style.backgroundColor = getRandomColor(); // Zufällige Farbe hinzufügen
+
+                        // Entferne die 'active'-Klasse und setze die Farbe nach kurzer Zeit zurück
+                        setTimeout(() => {
+                            selectedSpan.classList.remove('active');
+                            selectedSpan.style.backgroundColor = '#333d'; // Standardfarbe
+                        }, Math.floor(Math.random() * 1000) + 500);
+                    }
+                });
+            }
+
+            // Wiederholender Aufruf des erweiterten Leuchteffekts
+            function randomInterval() {
+                addRandomActiveClasses();
+                setTimeout(randomInterval, Math.floor(Math.random() * 200) + 100);
+            }
+
+            randomInterval(); // Starte den Leuchteffekt
+        });
+    </script>
+</body>
+</html>
