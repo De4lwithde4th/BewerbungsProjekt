@@ -1,0 +1,1 @@
+Ein Kleines Früheres Projekt nur um zu Beobachten ob ich auch Wirklich das Grundverständis der Programmierung verstanden Habe.
