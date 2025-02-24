@@ -1,0 +1,1 @@
+SELECT * FROM kunden WHERE preis;
