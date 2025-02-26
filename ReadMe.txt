@@ -1,0 +1,1 @@
+Das ist mein erstes Kotlin Programm. Es ist ein Konto mit der Pin "1234". Nach der eingabe des Korrekten Pins hat man 4 Optionen um zwischen den einzelnen Modies zu Wechseln. Das Programm läuft auf Kotlin und wurde mit Kotlin in der Entwicklungsumgebung Intellj IDEA erstellt.
